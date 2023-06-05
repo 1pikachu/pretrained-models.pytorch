@@ -218,6 +218,10 @@ def main():
             amp_enabled = False
         print("---- amp_enable:{}, amp_dtype:{}".format(amp_enabled, amp_dtype))
 
+        if args.device == "xpu":
+            model = torch.xpu.optimize(model, dtype=amp_dtype)
+            print("---- enable xpu optimize")
+
         with torch.autocast(device_type=args.device, enabled=amp_enabled, dtype=amp_dtype):
             validate(val_loader, model, criterion)
         return
