@@ -198,7 +198,7 @@ def main():
     print("---- fuser mode:", args.fuser_mode)
 
     image_size = pretrainedmodels.pretrained_settings[args.arch]["imagenet"]["input_size"]
-    images = torch.randn(args.batch_size, *image_size).cuda()
+    images = torch.randn(args.batch_size, *image_size).to(args.device)
     if args.jit:
         try:
             model = torch.jit.trace(model, images, check_trace=False)
