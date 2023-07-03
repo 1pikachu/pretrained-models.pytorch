@@ -145,9 +145,6 @@ def main():
     # else:
     #     scale = 0.875
     scale = 0.875
-    if args.arch == "vggm":
-        from pretrainedmodels.models import vggm
-        pretrainedmodels.pretrained_settings = vggm.pretrained_settings
     opt = pretrainedmodels.pretrained_settings[args.arch]["imagenet"]
 
     print('Images transformed from size {} to {}'.format(
