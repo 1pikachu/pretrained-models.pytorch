@@ -10,7 +10,7 @@ function main {
 
     # requirements
     pip install -r requirements.txt
-    pip uninstall pretrainedmodels 
+    pip uninstall -y pretrainedmodels
     python setup.py install
 
     cp oob-common/context_func.py . 
