@@ -13,6 +13,7 @@ from .senet import pretrained_settings as senet_settings
 from .cafferesnet import pretrained_settings as cafferesnet_settings
 from .pnasnet import pretrained_settings as pnasnet_settings
 from .polynet import pretrained_settings as polynet_settings
+from .vggm import pretrained_settings as vggm_settings
 
 all_settings = [
     fbresnet_settings,
@@ -28,7 +29,8 @@ all_settings = [
     senet_settings,
     cafferesnet_settings,
     pnasnet_settings,
-    polynet_settings
+    polynet_settings,
+    vggm_settings
 ]
 
 model_names = []

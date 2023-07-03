@@ -56,3 +56,5 @@ from .senet import se_resnext101_32x4d
 
 from .pnasnet import pnasnet5large
 from .polynet import polynet
+
+from .vggm import vggm

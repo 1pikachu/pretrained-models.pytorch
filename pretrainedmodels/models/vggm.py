@@ -5,7 +5,7 @@ from torch.autograd import Variable
 #from torch.legacy import nn as nnl
 import torch.utils.model_zoo as model_zoo
 
-__all__ = ['vggm']
+__all__ = ['VGGM', 'vggm']
 
 pretrained_settings = {
     'vggm': {
