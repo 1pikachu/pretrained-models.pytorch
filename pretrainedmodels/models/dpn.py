@@ -416,7 +416,7 @@ def adaptive_avgmax_pool2d(x, pool_type='avg', padding=0, count_include_pad=Fals
     elif pool_type == 'avgmax':
         x_avg = F.avg_pool2d(
                 x, kernel_size=(x.size(2), x.size(3)), padding=padding, count_include_pad=count_include_pad)
-        x_max = F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
+        x_max = F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding, stride=1)
         x = 0.5 * (x_avg + x_max)
     elif pool_type == 'max':
         x = F.max_pool2d(x, kernel_size=(x.size(2), x.size(3)), padding=padding)
