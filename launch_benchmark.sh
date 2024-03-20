@@ -58,10 +58,12 @@ function generate_core {
             OOB_EXEC_HEADER+=" -C $(echo ${device_array[i]} |awk -F ';' '{print $1}') "
         elif [ "${device}" == "cuda" ];then
             OOB_EXEC_HEADER=" CUDA_VISIBLE_DEVICES=${device_array[i]} "
-	          if [[ "${mode_name}" == "realtime" ]];then
-	              addtion_options+=" --nv_fuser "
-	          fi
-	      fi
+            if [[ "${mode_name}" == "realtime" ]];then
+                addtion_options+=" --nv_fuser "
+            fi
+        elif [ "${device}" == "xpu" ];then
+            OOB_EXEC_HEADER=" ZE_AFFINITY_MASK=${i} "
+        fi
         # faster without jit/nv_fuser
         printf " ${OOB_EXEC_HEADER} \
         python examples/imagenet_eval.py -e --performance --device ${device} \
