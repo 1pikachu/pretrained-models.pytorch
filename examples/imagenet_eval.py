@@ -84,6 +84,8 @@ parser.add_argument('--channels_last', type=int, default=1,
                     help='use channels last format')
 parser.add_argument('--config_file', type=str, default="./conf.yaml",
                     help='config file for int8 tuning')
+parser.add_argument('--compile', action='store_true', default=False, help='compile model')
+parser.add_argument('--backend', default="inductor", type=str, help='backend')
 
 parser.set_defaults(preserve_aspect_ratio=True)
 best_prec1 = 0
@@ -196,6 +198,9 @@ def main():
     else:
        args.fuser_mode = "none"
     print("---- fuser mode:", args.fuser_mode)
+    if args.compile:
+        print("----enable compiler")
+        model = torch.compile(model, backend=args.backend, options={"freezing": True})
 
     image_size = pretrainedmodels.pretrained_settings[args.arch]["imagenet"]["input_size"]
     images = torch.randn(args.batch_size, *image_size).to(args.device)
