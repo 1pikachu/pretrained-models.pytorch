@@ -198,9 +198,6 @@ def main():
     else:
        args.fuser_mode = "none"
     print("---- fuser mode:", args.fuser_mode)
-    if args.compile:
-        print("----enable compiler")
-        model = torch.compile(model, backend=args.backend, options={"freezing": True})
 
     image_size = pretrainedmodels.pretrained_settings[args.arch]["imagenet"]["input_size"]
     images = torch.randn(args.batch_size, *image_size).to(args.device)
@@ -227,6 +224,9 @@ def main():
         if args.device == "xpu":
             model = torch.xpu.optimize(model, dtype=amp_dtype)
             print("---- enable xpu optimize")
+        if args.compile:
+            print("----enable compiler")
+            model = torch.compile(model, backend=args.backend, options={"freezing": True})
 
         with torch.autocast(device_type=args.device, enabled=amp_enabled, dtype=amp_dtype):
             validate(val_loader, model, criterion)
