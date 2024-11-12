@@ -86,6 +86,8 @@ parser.add_argument('--config_file', type=str, default="./conf.yaml",
                     help='config file for int8 tuning')
 parser.add_argument('--compile', action='store_true', default=False, help='compile model')
 parser.add_argument('--backend', default="inductor", type=str, help='backend')
+parser.add_argument('--ipex', default=False, action='store_true', help="ipex is not enabled now")
+parser.add_argument("--xpu_fallback", default=False, action="store_true", help="Whether to set xpu fallback")
 
 parser.set_defaults(preserve_aspect_ratio=True)
 best_prec1 = 0
@@ -96,7 +98,7 @@ def main():
     args = parser.parse_args()
     print(args)
 
-    if args.device == "xpu":
+    if args.device == "xpu" and args.ipex:
         import intel_extension_for_pytorch
     elif args.device == "cuda":
         torch.backends.cuda.matmul.allow_tf32 = False
@@ -181,10 +183,15 @@ def main():
     model = model.to(args.device)
 
     model.eval()
-    if args.device == "xpu":
+    if args.device == "xpu" and args.ipex:
         datatype = torch.float16 if args.precision == "float16" else torch.bfloat16 if args.precision == "bfloat16" else torch.float
         model = torch.xpu.optimize(model=model, dtype=datatype)
         print("---- enable xpu optmize")
+
+    if args.xpu_fallback:
+        os.environ["PYTORCH_ENABLE_XPU_FALLBACK"] = "1"
+        print("PYTORCH_ENABLE_XPU_FALLBACK", os.environ["PYTORCH_ENABLE_XPU_FALLBACK"])
+        print("---- enable fallback")
 
     if args.channels_last or args.device == "cuda":
         try:
@@ -221,7 +228,7 @@ def main():
             amp_enabled = False
         print("---- amp_enable:{}, amp_dtype:{}".format(amp_enabled, amp_dtype))
 
-        if args.device == "xpu":
+        if args.device == "xpu" and args.ipex:
             model = torch.xpu.optimize(model, dtype=amp_dtype)
             print("---- enable xpu optimize")
         if args.compile:
