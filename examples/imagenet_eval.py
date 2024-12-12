@@ -337,7 +337,7 @@ def validate(val_loader, model, criterion):
 
             start = time.time()
             # compute output
-            with context_func(args.profile if i == profile_len else False, args.device, args.fuser_mode) as prof:
+            with context_func(args.profile if i == profile_len else False, args.device, args.fuser_mode, schedule_disable="yes") as prof:
                 output = model(input)
                 #loss = criterion(output, target)
             if args.device == "xpu":
